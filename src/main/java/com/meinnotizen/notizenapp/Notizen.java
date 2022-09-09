@@ -10,12 +10,20 @@ import javafx.beans.property.StringProperty;
  */
 public class Notizen {
     protected IntegerProperty id;
-    protected StringProperty datum;
+
     protected StringProperty description;
     protected StringProperty text;
+    protected StringProperty datum;
 
     public Notizen(){
         this(0,"","", "");
+    }
+
+    public Notizen(Integer id , String description, String text, String datum) {
+        this.id = new SimpleIntegerProperty(id);
+        this.text =  new SimpleStringProperty(text);
+        this.description =  new SimpleStringProperty(description);
+        this.datum =  new SimpleStringProperty(datum);
     }
 
     public int getId() {
@@ -28,13 +36,6 @@ public class Notizen {
 
     public void setId(int id) {
         this.id.set(id);
-    }
-
-    public Notizen(Integer id , String datum, String description, String text) {
-        this.id = new SimpleIntegerProperty(id);
-        this.datum =  new SimpleStringProperty(datum);
-        this.text =  new SimpleStringProperty(text);
-        this.description =  new SimpleStringProperty(description);
     }
 
 
@@ -61,6 +62,16 @@ public class Notizen {
 
     public String getDescription() {
         return description.get();
+    }
+
+    @Override
+    public String toString() {
+        return "Notizen{" +
+                "id=" + id +
+                ", description=" + description +
+                ", text=" + text +
+                ", datum=" + datum +
+                '}';
     }
 
     public StringProperty descriptionProperty() {

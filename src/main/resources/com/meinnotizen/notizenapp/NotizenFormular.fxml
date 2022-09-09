@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="250.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.meinnotizen.notizenapp.NotizenFormularController">
+   <children>
+      <GridPane layoutX="38.0" layoutY="45.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="109.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="181.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="ID" />
+            <Label text="Description" GridPane.rowIndex="1" />
+            <Label text="Text" GridPane.rowIndex="2" />
+            <Label text="Datum" GridPane.rowIndex="3" />
+            <TextField fx:id="idField" GridPane.columnIndex="1" />
+            <TextField fx:id="descriptionFild" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="textField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="datumField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <ButtonBar layoutX="100.0" layoutY="146.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="10.0">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#handleBestaetigen" text="Bestätigen" />
+            <Button mnemonicParsing="false" onAction="#handleAbbrechen" text="Abbrechen" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</AnchorPane>

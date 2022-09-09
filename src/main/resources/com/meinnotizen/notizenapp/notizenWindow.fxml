@@ -18,12 +18,15 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#handleLaden" text="DatenLadenVomDatei" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleSpeichern" text="DatenSpeichernInDatei" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleBeenden" text="Beenden" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#handleNeuesNotizen" text="NeuNotizen" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditieren" text="Editieren" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -45,20 +48,20 @@
       <TextArea fx:id="textArea" prefHeight="433.0" prefWidth="400.0" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
-      <ButtonBar prefHeight="40.0" prefWidth="353.0" BorderPane.alignment="CENTER">
+      <ButtonBar prefHeight="41.0" prefWidth="622.0" BorderPane.alignment="CENTER">
         <buttons>
             <Label fx:id="datum" minWidth="0.0" prefHeight="17.0" prefWidth="499.0" text="Datum" />
+            <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#handleBeenden" text="Beenden" textAlignment="CENTER">
+               <opaqueInsets>
+                  <Insets left="100.0" right="100.0" />
+               </opaqueInsets>
+            </Button>
           <Button mnemonicParsing="false" onAction="#handleDeleteNotiz" text="Loeschen" textAlignment="CENTER">
                <opaqueInsets>
                   <Insets right="100.0" />
                </opaqueInsets>
             </Button>
-            <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Beenden" textAlignment="CENTER">
-               <opaqueInsets>
-                  <Insets left="100.0" right="100.0" />
-               </opaqueInsets>
-            </Button>
-            <Button mnemonicParsing="false" text="Schreiben" />
+            <Button mnemonicParsing="false" onAction="#handleNeuesNotizen" prefHeight="26.0" text="Schreiben" />
         </buttons>
          <opaqueInsets>
             <Insets />

@@ -5,7 +5,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.*;
@@ -19,7 +21,8 @@ public class HelloApplication extends Application {
 
 
     private Stage primaryStage;
-    private ObservableList<Notizen> notizenData = FXCollections.observableArrayList();
+   // private ObservableList<Notizen> notizenData = FXCollections.observableArrayList();
+    private NotizenManager notizenManager = new NotizenManager();
 
 
     public HelloApplication(){
@@ -34,10 +37,10 @@ public class HelloApplication extends Application {
             ResultSet ergebnis = prepStmt.executeQuery(anfrage);
             while (ergebnis.next()){
                 int id = ergebnis.getInt("idNotices");
-                String datum = ergebnis.getString("dataandtime");
                 String descr = ergebnis.getString("description");
                 String text = ergebnis.getString("text");
-                notizenData.add(new Notizen(id, datum, descr, text));
+                String datum = ergebnis.getString("dataandtime");
+                notizenManager.getNotizenData().add(new Notizen(id, descr, text, datum));
             }
             ergebnis.close();
             prepStmt.close();
@@ -58,7 +61,7 @@ public class HelloApplication extends Application {
     public void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(HelloApplication.class.getResource("notizenWindow.fxml"));
+            loader.setLocation(HelloApplication.class.getResource("NotizenWindow.fxml"));
             BorderPane rootLayout = (BorderPane) loader.load();
 
             NotizenWindowControl controller = loader.getController();
@@ -71,6 +74,58 @@ public class HelloApplication extends Application {
             e.printStackTrace();
         }
     }
+    /** Oeffnet das Formular zum Editieren eines (ggf. neuen, d. h. leeren) Webinar-Objekts.
+	 * Gibt zurueck, ob die Bearbeitung bestaetigt oder abgebrochen wurde.
+     *
+     * @param notizen Das zu editierende Webinar-Objekt
+	 * @return true falls "Bestaetigen" geklickt wurde, sonst false.
+     */
+    public boolean notizenFormularZeigen(Notizen notizen) {
+        //View laden
+        // ### Beginn VARIANTE 1: View aus fxml ###
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(HelloApplication.class.getResource("NotizenFormular.fxml"));
+            AnchorPane pane = (AnchorPane) loader.load();
+
+            //Controller (steht in fxml) holen und Webinar-Objekt uebergeben
+            NotizenFormularController controller = loader.getController();
+            // ### Ende VARIANTE 1: View aus fxml ###
+
+            // ### Beginn VARIANTE 2: View aus Java ###
+	        /*
+			WebinarFormularController controller = new WebinarFormularController();
+			AnchorPane pane = (AnchorPane) controller.getPane();
+			controller.initialize();
+			*/
+            // ### Ende VARIANTE 2: View aus Java ###
+
+            //(Secondary) Stage fuer das Popup-Formular erzeugen und mit der Primary Stage verknuepfen
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Bearbeite Webinardaten");
+            popupStage.initModality(Modality.WINDOW_MODAL);	//Popup muss geschlossen werden, bevor es im Hauptfenster weitergehen kann
+            popupStage.initOwner(primaryStage);
+            popupStage.setResizable(false);					//fixe Fenstergroesse
+            Scene scene = new Scene(pane);
+            popupStage.setScene(scene);
+
+            controller.setNotizen(notizen);
+            //ausserdem Popup Stage uebergeben, damit Controller diese z. B. schliessen oder weitere Fenster oeffnen kann
+            controller.setPopupStage(popupStage);
+
+            //Popup anzeigen und warten, bis der User es schliesst
+            popupStage.showAndWait();
+
+            //zurueckgeben, ob bestaetigt oder abgebrochen wurde
+            return controller.istBestaetigt();
+            // ### Beginn catch-Block VARIANTE 1: View aus fxml ###
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        // ### Ende catch-Block VARIANTE 1: View aus fxml ###
+
+    }
 
     public static void main(String[] args) {
         launch();
@@ -78,8 +133,9 @@ public class HelloApplication extends Application {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
-    public ObservableList<Notizen> getNotizenData() {
-        return notizenData;
+
+    public NotizenManager getNotizenManager(){
+        return notizenManager;
     }
 
 }
