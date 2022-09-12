@@ -13,18 +13,28 @@ public class NotizenManager {
     public ObservableList<Notizen> getNotizenData() {
         return notizenData;
     }
-    /** Nimmt ein Webinar-Objekt entgegen und traegt es in die interne Liste ein.
+
+    /**
+     * Nimmt ein Notiz-Objekt entgegen und traegt es in die interne Liste ein.
+     *
      * @param webinar Das einzutragende Webinar.
      */
     public void webinarEintragen(Notizen webinar) {
         notizenData.add(webinar);
     }
-     boolean notizenLaden(String dateiname){
-        Notizen notizen ;
+
+    /**
+     * Laedt Notizdaten aus einer Textdatei in die Liste.
+     *
+     * @param dateiname der Quelldatei
+     * @return true, falls Laden erfolgreich, false sonst
+     */
+    boolean notizenLaden(String dateiname) {
+        Notizen notizen;
         BufferedReader br = null;
-        try{
+        try {
             br = new BufferedReader(new FileReader(dateiname));
-            while (br.ready()){
+            while (br.ready()) {
                 notizen = new Notizen();
                 notizen.setId(Integer.parseInt(br.readLine()));
                 notizen.setDescription(br.readLine());
@@ -33,39 +43,46 @@ public class NotizenManager {
                 notizenData.add(notizen);
             }
             return true;
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-        }finally {
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return false;
+        } finally {
             try {
                 if (br != null) {
                     br.close();
                 }
-            }catch (IOException e){
-                    System.out.println(e.getMessage());
-                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
-        return false;
     }
-    boolean notizenSpeichern(String dateiname){
+
+    /**
+     * Speichert die Notizdaten als Textdatei.
+     *
+     * @param dateiname der Zieldatei
+     * @return true, falls Speicherung erfolgreich, false sonst
+     */
+    boolean notizenSpeichern(String dateiname) {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(dateiname));
-            for (Notizen notizen : notizenData){
-                if (notizen != null){
+            for (Notizen notizen : notizenData) {
+                if (notizen != null) {
                     bw.write(notizen.getId());
                     bw.write(notizen.getDescription());
                     bw.write(notizen.getText());
                     bw.write(notizen.getDatum());
                 }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             try {
                 if (bw != null) {
                     bw.close();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }

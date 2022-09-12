@@ -19,6 +19,14 @@ public class Notizen {
         this(0,"","", "");
     }
 
+    /**
+     * konstruktor
+     *
+     * @param id
+     * @param description
+     * @param text
+     * @param datum
+     */
     public Notizen(Integer id , String description, String text, String datum) {
         this.id = new SimpleIntegerProperty(id);
         this.text =  new SimpleStringProperty(text);

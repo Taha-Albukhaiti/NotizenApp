@@ -115,6 +115,8 @@ public class NotizenWindowControl {
             //helloApplication.getNotizenManager().getNotizenData().clear();
             helloApplication.getNotizenManager().notizenLaden(file.getAbsolutePath());
             notizenTableView.setItems(helloApplication.getNotizenManager().getNotizenData());
+
+          /*  // Noch zu bearbeiten
             List<Notizen> n = helloApplication.
                     getNotizenManager().
                     getNotizenData().
@@ -123,6 +125,8 @@ public class NotizenWindowControl {
                     getNotizenManager().
                     getNotizenData().
                     stream().toList());
+
+           */
         }
     }
 

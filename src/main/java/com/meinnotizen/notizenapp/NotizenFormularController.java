@@ -34,6 +34,7 @@ public class NotizenFormularController {
     public void setPopupStage(Stage popupStage) {
         this.popupStage = popupStage;
     }
+
     /**
      * Setzt das Webinar-Objekt, das in diesem Formular bearbeitet werden soll.
      *
@@ -48,6 +49,7 @@ public class NotizenFormularController {
         textField.setText(notizen.getText());
         datumField.setText(notizen.getDatum());
     }
+
     /**
      * Liefert zurueck, ob das Formular mit "Bestaetigen" oder "Abbrechen" geschlossen wurde.
      *
@@ -64,14 +66,15 @@ public class NotizenFormularController {
     @FXML
     private void handleBestaetigen() {
         if (eingabenGueltig()) {
-            notizen.setId(Integer.parseInt(idField.getText()));						//String -> int
+            notizen.setId(Integer.parseInt(idField.getText())); //String -> int
             notizen.setDescription(descriptionFild.getText());
             notizen.setText(textField.getText());
             notizen.setDatum(datumField.getText());
             bestaetigt = true;
-            popupStage.close();		//Fenster schliessen
+            popupStage.close();        //Fenster schliessen
         }
     }
+
     /**
      * Prueft die Eintraege in den Formularfeldern auf Gueltigkeit.
      *
