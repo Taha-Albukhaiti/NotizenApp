@@ -1,21 +1,14 @@
 package com.meinnotizen.notizenapp;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.sql.*;
-
 import java.io.IOException;
-import java.util.logging.Logger;
-
-import static com.meinnotizen.notizenapp.SqlHandling.*;
 
 public class HelloApplication extends Application {
 
@@ -27,14 +20,9 @@ public class HelloApplication extends Application {
 
     public HelloApplication(){
         try {
-            String user = "root";
-            String password = "Taha@1234";
-            //String dBurl = "jdbc:m://slo.swe.fh-luebeck.de:3306/hochschule";
-            String dBurl = "jdbc:mysql://localhost:3306/Notizen";
-            Connection con = DriverManager.getConnection(dBurl, user, password);
-            String anfrage = "SELECT idNotices, dataandtime, description, text FROM Notices";
-            Statement prepStmt = con.createStatement();
-            ResultSet ergebnis = prepStmt.executeQuery(anfrage);
+            Connection con = SqlHandling.getInstance().connect("jdbc:mysql://localhost:3306/Notizen", "root", "Taha@1234");
+            ResultSet ergebnis = SqlHandling.getInstance().query("SELECT idNotices, dataandtime, description, text FROM Notices");
+
             while (ergebnis.next()){
                 int id = ergebnis.getInt("idNotices");
                 String descr = ergebnis.getString("description");
@@ -42,8 +30,8 @@ public class HelloApplication extends Application {
                 String datum = ergebnis.getString("dataandtime");
                 notizenManager.getNotizenData().add(new Notizen(id, descr, text, datum));
             }
+
             ergebnis.close();
-            prepStmt.close();
             con.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " \n" + e.getSQLState());

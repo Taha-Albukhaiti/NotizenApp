@@ -3,12 +3,10 @@ package com.meinnotizen.notizenapp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 
@@ -104,7 +102,8 @@ public class NotizenWindowControl {
     }
 
     /**
-     * Handler fuer Clicks auf Laden bzw. Strg-L. Oeffnet einen FileChooser für Textdateien, laedt (falls Datei ausgewaehlt)
+     * Handler fuer Clicks auf Laden bzw. Strg-L.
+     * Oeffnet einen FileChooser für Textdateien, laedt (falls Datei ausgewaehlt)
      * die Objekte und setzt sie in die Tabelle.
      */
     @FXML
@@ -171,7 +170,7 @@ public class NotizenWindowControl {
         System.out.println(bestaetigt);
         if (bestaetigt) {
             helloApplication.getNotizenManager().webinarEintragen(notizen);
-            // insertDataInTheDatabase((Notizen) helloApplication.getNotizenManager().getNotizenData());
+            insertDataInTheDatabase(notizen);
         }
 
     }
@@ -192,11 +191,7 @@ public class NotizenWindowControl {
     public static void deletDataInTheFromTheDatabase(Notizen notizen) {
 
         try {
-            String user = "root";
-            String password = "Taha@1234";
-            String dBurl = "jdbc:mysql://localhost:3306/Notizen";
-            Connection con = DriverManager.getConnection(dBurl, user, password);
-
+            Connection con = SqlHandling.getInstance().connect("root", "Taha@1234", "jdbc:mysql://localhost:3306/Notizen");
             String loeschen = "DELETE FROM Notices WHERE idNotices = " + notizen.getId() + ";";
             Statement statement = con.createStatement();
             statement.execute(loeschen);
@@ -210,24 +205,23 @@ public class NotizenWindowControl {
 
 
     /**
+     *
      * @param notizen
      */
-    public static void insertDataInTheDatabase(Notizen notizen) {
+    public static void insertDataInTheDatabase(@NotNull Notizen notizen) {
 
         try {
-            String user = "root";
-            String password = "Taha@1234";
-            String dBurl = "jdbc:mysql://localhost:3306/Notizen";
-            Connection con = DriverManager.getConnection(dBurl, user, password);
-
+            Connection con = SqlHandling.getInstance().connect("jdbc:mysql://localhost:3306/Notizen", "root", "Taha@1234");
             String einfuegen = "INSERT into Notices(idNotices, dataandtime, description, text) " +
-                    "VALUES" + "(" + notizen.getId() + "," + "'" + notizen.getDatum() + "'" + "," +
-                    "'" + notizen.getDescription() + "'" + ", " +
-                    notizen.getText() + "'" + ");";
-            Statement statement = con.createStatement();
-            statement.execute(einfuegen);
+                    " values (?, ?, ?, ?)";
+            PreparedStatement preparedStmt = con.prepareStatement(einfuegen);
+            preparedStmt.setInt(1, notizen.getId());
+            preparedStmt.setString (2, notizen.getDatum());
+            preparedStmt.setString(3, notizen.getDescription());
+            preparedStmt.setString(4, notizen.getText());
 
-            statement.close();
+            preparedStmt.execute();
+           // preparedStmt.close();
             con.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
